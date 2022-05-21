@@ -1,0 +1,83 @@
+{% extends 'myapp/base.html' %}
+{% block title %} Home{% endblock title %} 
+{% block body %}
+  {% if message %}
+        <div class="alert alert-primary" role="alert">
+          {{message}}
+        </div>
+      {%endif%}
+
+    <div class="container my-3">
+        <h2>Add a Customer</h2>
+        <form action="/add-customer/" method="POST">
+          {% csrf_token %}
+            <div class="mb-3">
+              <label for="title" class="form-label">Customer Name</label>
+              <input type="text" class="form-control" name="name" id="title" aria-describedby="emailHelp"> 
+            </div>
+            <div class="mb-3">
+              <label for="desc" class="form-label">Customer Contact No.</label>
+              <input type="text" class="form-control" name="contact" id="desc">
+            </div>
+            
+            <button type="submit" class="btn btn-dark">Add</button>
+          </form>
+    </div>
+    <div class="container my-3">
+      <div class="container my-3">
+        <h2>Your Customer List</h2>
+        <a href="/latest" type="button" class="btn btn-outline-dark btn-sm mx-2">Latest Customer</button>
+        <a href="/oldest" type="button" class="btn btn-outline-dark btn-sm mx-2">Oldest Customer</button>
+        <a href="/bytitle" type="button" class="btn btn-outline-dark btn-sm mx-2">Filter By Title</button>
+        <a href="/latest/5" type="button" class="btn btn-outline-dark btn-sm mx-2">Latest 5 Customer</button>
+        <a href="/oldest/5" type="button" class="btn btn-outline-dark btn-sm mx-2">Oldest 5 Customer</button>      
+        <a href="bydate" class="link-secondary mx-4"></a>
+
+      </div>
+                {% if allTodo|length == 0 %}
+                   
+                <div class="alert alert-dark" role="alert">
+                    No customer found with this name! 
+                  </div>
+                    {% else %} 
+                    <table class="table">
+                        <thead>
+                          <tr>
+                            <th scope="col">SNo</th>
+                            <th scope="col">Customer Name</th>
+                            <th scope="col">Customer Contact No.</th>
+                            <th scope="col">Time</th>
+                            <th scope="col">Actions</th>
+                          </tr>
+                        </thead>
+                        
+                        <tbody>
+              {% for todo in allTodo %}
+              
+              <tr>
+
+                <th scope="row">{{ forloop.counter }}</th>
+                <td>{{todo.title }}</td>
+                <td>{{todo.desc}}</td>
+                <td>{{todo.date_created}}</td>
+                <td>
+                  <a href="/view/{{todo.id}}" type="button" class="btn btn-outline-dark btn-sm mx-1 my-1">Customer Khata</button>
+                  <a href="/update/{{todo.id}}" type="button" class="btn btn-outline-dark btn-sm mx-1 my-1">Update Record</button>
+                  <a href="/delete/{{todo.id}}" type="button" class="btn btn-outline-dark btn-sm mx-1 my-1">Delete</button>
+                
+                </td>
+              </tr>
+              
+              {% endfor %}
+            </tbody>
+            </table>
+              {% endif %}
+               
+           
+    </div>
+  
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0"
+        crossorigin="anonymous"></script>
+
+{% endblock body %}
